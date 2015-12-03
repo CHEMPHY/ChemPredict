@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>Marvin JS Example - Get The Molecule</title>
+  <link type="text/css" rel="stylesheet" href="marvinjs/css/doc.css" />
+  <link type="text/css" rel="stylesheet" href="marvinjs/js/lib/rainbow/github.css" />
+  <script src="marvinjs/js/lib/jquery-1.9.1.min.js"></script>
+  <script src="marvinjs/js/lib/rainbow/rainbow-custom.min.js"></script>
+  <script src="marvinjs/gui/lib/promise-1.0.0.min.js"></script>
+  <script src="marvinjs/js/marvinjslauncher.js"></script>
+         <link rel="stylesheet" href="bootstrap.min.css"/>
+        <script src="bootstrap.min.js"></script>
+  <script>
+
+    var marvinSketcherInstance;
+
+    $(document).ready(function handleDocumentReady (e) {
+      MarvinJSUtil.getEditor("#sketch").then(function (sketcherInstance) {
+        marvinSketcherInstance = sketcherInstance;
+        initControl();
+      },function (error) {
+        alert("Cannot retrieve sketcher instance from iframe:"+error);
+      });
+    });
+
+    function initControl () {
+
+      // get mol button
+      $("#btn-getmol").on("click", function (e) {
+        marvinSketcherInstance.exportStructure("mol").then(function(source) {
+          //$("#molsource").text(source);
+          
+          parent.hello(source);
+          parent.$(".x").click();
+        }, function(error) {
+          alert("Molecule export failed:"+error); 
+        });
+      });
+    }
+
+  </script>
+</head>
+<body>
+ 
+    <div style="display: block;    margin-left: auto;    margin-right: auto; width: 50%;">
+    <div class="resizable">
+      <iframe src="marvinjs/editorws.html" id="sketch" class="sketcher-frame"></iframe>
+    </div>
+    <ul style="-moz-padding-start: 0px; -webkit-padding-start: 0px; padding-start: 0px padding-0px;">
+      <li><button type="button" class="btn btn-success btn-sm" id="btn-getmol" value="Get mol">
+                                        Export structure
+                                    </button></li>
+      
+    </ul>
+      
+    </div>
+
+</body>
+</html>
