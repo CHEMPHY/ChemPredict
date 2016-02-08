@@ -7,6 +7,7 @@ include_once "/usr/local/lib/openbabel.php";
 
 $target_dir = "uploads/";
 
+<<<<<<< HEAD
 
 
 //upload file
@@ -15,10 +16,20 @@ $fileinfo1 =new SplFileInfo(basename($_FILES["file1"]["name"]));
 $extension1=$fileinfo1->getExtension();
 $target_file1 = $tmpfname1.".".$extension1;
 move_uploaded_file($_FILES["file1"]["tmp_name"], $target_file1);
+=======
+$tmpfname1 = tempnam("uploads", date("Ymd"));
+$fileinfo1 =new SplFileInfo(basename($_FILES["file1"]["name"]));
+$extension=$fileinfo1->getExtension();
+$target_file1 = $target_dir . $tmpfname1.".".$extension;
+move_uploaded_file($_FILES["file1"]["tmp_name"], $target_file1);
+echo $target_file1;
+
+>>>>>>> ec557cda390cdf948ec7f2621fd6864a26b3fd9b
 
 
 $tmpfname2 = tempnam("uploads", date("Ymd"));
 $fileinfo2 =new SplFileInfo(basename($_FILES["file2"]["name"]));
+<<<<<<< HEAD
 $extension2=$fileinfo2->getExtension();
 $target_file2 =  $tmpfname2.".".$extension2;
 move_uploaded_file($_FILES["file2"]["tmp_name"], $target_file2);
@@ -76,5 +87,49 @@ for ($i=0;$i<count($outputs)-1;$i++){
 
 
 
+=======
+$extension=$fileinfo2->getExtension();
+$target_file1 = $target_dir . $tmpfname2.".".$extension;
+move_uploaded_file($_FILES["file2"]["tmp_name"], $target_file2);
+
+
+
+
+$handle = fopen($tmpfname, "w");
+fwrite($handle, "writing to tempfile");
+fclose($handle);
+
+
+$obMol = new OBMol;
+$obConversion = new OBConversion;
+
+//translate to smiles format
+$obConversion->SetInAndOutFormats($extension, "smi");
+$obConversion->ReadFile($obMol, $target_file1);
+$numAtoms = $obMol->NumAtoms(); # now 5 atoms
+$outMDL = $obConversion->WriteString($obMol);
+echo $outMDL;
+$obConversion->ReadFile($obMol, $target_file2);
+$outMDL = $obConversion->WriteString($obMol);
+echo $outMDL;
+
+//graphics
+$obConversion->SetInAndOutFormats($extension, "svg");
+$obConversion->ReadFile($obMol, $target_file1);
+$numAtoms = $obMol->NumAtoms(); # now 5 atoms
+$outMDL = $obConversion->WriteString($obMol);
+echo $outMDL;
+$obConversion->ReadFile($obMol, $target_file2);
+$outMDL = $obConversion->WriteString($obMol);
+echo $outMDL;
+
+
+$command=escapeshellcmd("/home/mzhu7/chemroutes/test.py");
+$output=shell_exec($command);
+
+$obConversion->ReadString($obMol, $output);
+$outMDL = $obConversion->WriteString($obMol);
+echo $outMDL;
+>>>>>>> ec557cda390cdf948ec7f2621fd6864a26b3fd9b
 
 ?>
