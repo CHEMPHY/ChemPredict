@@ -9,12 +9,74 @@
         <meta name="author" content=""/>
         <link rel="icon" href="favicon.ico"/>
         <title>
-            Cover Template for Bootstrap
+            ChemRoutes
         </title>
         <link rel="stylesheet" href="bootstrap.min.css"/>
         <link href="cover.css" rel="stylesheet"/>
+
+        <script src="marvinjs/js/lib/rainbow/rainbow-custom.min.js"></script>
+        <script src="marvinjs/gui/lib/promise-1.0.0.min.js"></script>
+        <script src="marvinjs/js/marvinjslauncher.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="bootstrap.min.js"></script>
+        <script src="eModal.min.js">
+        </script>
+
+        <script>
+            $( "#num_reactants" ).change(function() {
+            $("#files").empty();
+            var i;
+            var fileindex;
+            for(i=1;i
+            <=this.value;i++){
+                fileindex="file"+i;
+                $("#files").append("<input type='file' name="+fileindex+" /><br/>");
+                }
+                console.log(this.value)
+                });
+            
+        </script>
+
+        <script>
+            window.addEventListener("message", function(event) {
+            try {
+            var externalCall = JSON.parse(event.data);
+            marvin.onReady(function() {
+            marvin.sketcherInstance[externalCall.method].apply(marvin.sketcherInstance, externalCall.args);
+            });
+            } catch (e) {
+            console.log(e);
+            }
+            }, false);
+            // called when Marvin JS loaded
+            function sketchOnLoad() {
+            if(marvin.Sketch.isSupported()) {
+            marvin.sketcherInstance = new marvin.Sketch("sketch");
+            marvin.sketcherInstance.setServices(getDefaultServices());
+            } else {
+            alert("Cannot initiate sketcher. Current browser may not support HTML canvas or may run in Compatibility Mode.");
+            }
+            }
+        </script>     
+
+		<script>
+		function myFunction()
+		{
+			eModal.iframe("test.htm" ,"Structures");
+
+		}
+
+		 function hello(string){
+   var name=string
+   document.getElementById('smiles1').value=name;
+   }
+		</script>
+
     </head>
     <body>
+
+
+
         <div class="site-wrapper">
             <div class="site-wrapper-inner">
                 <div class="cover-container">
@@ -53,9 +115,6 @@
                                         Select how many reactants/reagents.
                                     </label>
                                     <select class="form-control" id="num_reactants" name="num_reactants">
-                                        <option>
-                                            1
-                                        </option>
                                         <option selected>
                                             2
                                         </option>
@@ -71,11 +130,38 @@
                                     </select>
                                 </fieldset>
                                 <div id="files">
-                                <input type="file" name="file1" />
-                                <br/>
-                                <input type="file" name="file2" />
+                                Reactant1: 
+                                    <label class="btn btn-success btn-sm" for="my-file-selector" style="width:150px;">
+                                        <input name="file1" id="my-file-selector" type="file" style="display:none;"  />
+                                        Upload
+                                    </label>
+                                    
+                                    <button type="button" class="btn btn-warning btn-sm" id="file1draw" onclick="myFunction('smiles1')"  style="width:150px;">
+                                        Draw
+                                    </button>
+
+                                    <input type=hidden name="smiles1" id="smiles1" />
+
+                                
+                                   
+
+                                    <br/><br/> Reactant2: 
+                                    <label class="btn btn-success btn-sm" for="my-file-selector2" style="width:150px;">
+                                        <input name="file2" id="my-file-selector2" type="file" style="display:none;" />
+                                        Upload
+                                    </label>
+                                    
+                                    <button type="button" class="btn btn-warning btn-sm" onclick="myFunction('smiles2')"  style="width:150px;">
+                                        Draw
+                                    </button>
+                                    <input type=hidden name="smiles2" id="smiles2" />
+
+                                   
+                                    
                                 </div>
-                                <button type="submit" class="btn btn-primary">
+
+                                <br/>
+                                <button type="submit" class="btn btn-primary btn-lg" style="width:200px;">
                                     Submit
                                 </button>
                             </form>
@@ -96,25 +182,6 @@
             ==================================================
         -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js">
-        </script>
-        <script src="bootstrap.min.js">
-        </script>
-        <script>
-            $( "#num_reactants" ).change(function() {
-            	$("#files").empty();
-            	var i;
-            	var fileindex;
-            	for(i=1;i<=this.value;i++){
-            		fileindex="file"+i;
-            		$("#files").append("<input type='file' name="+fileindex+" ><br>");
-            	}
-            	
-            console.log(this.value)
 
-
-            });
-        </script>
-    </script>
-</body>
+    </body>
 </html>
